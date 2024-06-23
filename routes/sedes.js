@@ -21,7 +21,6 @@ router.get('/listar/:id',[
 
 router.get('/activos',[
     validarJWT,
-    validarRol(["ADMIN","RECEPCION"]),
     validarCampos
   ], httpSedes.getSedesActivo)
 

@@ -15,31 +15,30 @@ router.get('/',[
 
 router.get('/listar/:id',[
   validarJWT,
-  validarRol(["ADMIN","RECEPCION","ENTRENADOR"]),
+  validarRol(["ADMIN","RECEPCION"]),
   validarCampos
 ], httpClientes.getClientesID)
 
 router.get('/activos',[
   validarJWT,
-  validarRol(["ADMIN","RECEPCION","ENTRENADOR"]),
   validarCampos
 ], httpClientes.getClienteActivo)
 
 router.get('/inactivos',[
   validarJWT,
-  validarRol(["ADMIN","RECEPCION","ENTRENADOR"]),
+  validarRol(["ADMIN","RECEPCION"]),
   validarCampos
 ], httpClientes.getClienteInactivo)
 
 router.get('/plan/:id',[
   validarJWT,
-  validarRol(["ADMIN","RECEPCION","ENTRENADOR"]),
+  validarRol(["ADMIN","RECEPCION"]),
   validarCampos
 ], httpClientes.getClientesPlan)
 
 router.post('/',[
   validarJWT,
-  validarRol(["ADMIN","RECEPCION","ENTRENADOR"]),
+  validarRol(["ADMIN","RECEPCION"]),
   check('nombre', "El nombre no puede estar vacio").notEmpty(),
   check('fechaNacimiento', "La fecha no puede estar vacia").notEmpty(),
   check('edad', "La edad no puede estar vacia").notEmpty(),
@@ -56,7 +55,7 @@ router.post('/',[
 
 router.put('/:id',[
   validarJWT,
-  validarRol(["ADMIN","RECEPCION","ENTRENADOR"]),
+  validarRol(["ADMIN","RECEPCION"]),
   check('id', "Se nesecita un mongoid valido").isMongoId(),
   check('id').custom(helpersCliente.validarExistaClienteId),
   validarCampos 
@@ -64,7 +63,7 @@ router.put('/:id',[
 
 router.put('/activar/:id',[
   validarJWT,
-  validarRol(["ADMIN","RECEPCION","ENTRENADOR"]),
+  validarRol(["ADMIN","RECEPCION"]),
   check('id', "Se nesecita un mongoid valido").isMongoId(),
   check('id').custom(helpersCliente.validarExistaClienteId),
   validarCampos 
@@ -72,7 +71,7 @@ router.put('/activar/:id',[
 
 router.put('/desactivar/:id',[
   validarJWT,
-  validarRol(["ADMIN","RECEPCION","ENTRENADOR"]),
+  validarRol(["ADMIN","RECEPCION"]),
   check('id', "Se nesecita un mongoid valido").isMongoId(),
   check('id').custom(helpersCliente.validarExistaClienteId),
   validarCampos 
@@ -80,7 +79,7 @@ router.put('/desactivar/:id',[
 
 router.patch('/renovarP/:idC/:idP',[
   validarJWT,
-  validarRol(["ADMIN","RECEPCION","ENTRENADOR"]),
+  validarRol(["ADMIN","RECEPCION"]),
   check('idC', "Se nesecita un mongoid valido").isMongoId(),
   check('idP', "Se nesecita un mongoid valido").isMongoId(),
   validarCampos
