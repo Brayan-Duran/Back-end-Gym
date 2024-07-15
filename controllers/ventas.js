@@ -51,7 +51,7 @@ const httpVentas = {
                 }else {
                     newCodigo = 'VE001';
                 }
-                const venta = new Venta({idProducto,fechaVenta,codigo:newCodigo, valorUnitario, cantidad: result, total: totl })
+                const venta = new Venta({idProducto,fechaVenta,codigo:newCodigo, valorUnitario, cantidad: cantidad, total: totl })
                 await venta.save();
                 await Producto.findByIdAndUpdate(idProducto,{
                     cantidad: result
@@ -67,9 +67,34 @@ const httpVentas = {
     },
     putVentas: async (req, res) =>{
         const {id} = req.params;
-        const {idProducto, ...resto} = req.body;
-        const venta = await Venta.findByIdAndUpdate(id, {idProducto,...resto}, {new:true})
-        res.json({venta})
+        try {
+            const {valorUnitario,cantidad} = req.body;
+            const ventaB = await Venta.findById(id)
+            .populate("idProducto")
+
+            const resultado = ventaB.cantidad + ventaB.idProducto.cantidad
+            const result = resultado-cantidad
+            const totl = valorUnitario * cantidad
+            if(result <= 0){
+                return res.status(200).json({ message: `El producto ${ventaB.idProducto.nombre} ya no tiene stock` })
+            }else{
+                await Venta.findByIdAndUpdate(id,{
+                    idProducto: ventaB.idProducto._id,
+                    valorUnitario,
+                    cantidad: cantidad,
+                    total: totl
+                })
+                await Producto.findByIdAndUpdate(ventaB.idProducto._id,{
+                    cantidad: result
+                })
+                res.json({message: "Edicion exitosa"})
+            }
+            
+        } catch (error){
+            res.status(400).json({
+                err:"No se pudo editar la venta"
+            })
+        }
     },
     putVentasActivar: async(req, res) =>{
         const {id} = req.params;
